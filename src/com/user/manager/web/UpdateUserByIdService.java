@@ -32,10 +32,8 @@ public class UpdateUserByIdService extends HttpServlet {
         // 调用service中 通过id修改用户信息的方法
         UserService userService = new UserServiceImpl();
         userService.updateUserById(user);
-        // 跳转 所有用户页面list 并显示
-        List<User> list = userService.findAll();
-        request.setAttribute("list",list);
-        request.getRequestDispatcher("/list.jsp").forward(request,response);
+        // 跳转 所有用户页面list 并显示 (重定向)
+        response.sendRedirect(request.getContextPath() + "/FindByPageServlet");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

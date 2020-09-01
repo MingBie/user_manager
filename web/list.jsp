@@ -34,41 +34,138 @@
         }
     </style>
 
+    <script>
+        $(function() {
+            // 全选
+            $("#selectAll").click(function() {
+                $("input").prop("checked",$("#selectAll").prop("checked"));
+            })
+        })
+        function tableform() {
+            // 判断是否有选中需要删除的用户
+            var isSubmit = false;
+            $.each($("input[type=checkbox]"),function (i, n) {
+                if (n.checked) {
+                    isSubmit = true;
+                }
+            })
+            // 弹窗进行确定
+            if (isSubmit) {
+                var flag = confirm("请确定删除？");
+                if (flag) {
+                    // 提交表单 跳转 DeleteSelectUserServlet
+                    $("#tableform").get(0).submit();
+                }
+            } else {
+                alert("未选中需要删除的对象!");
+            }
+        }
+    </script>
+
 </head>
 <body>
 <div class="container">
     <h3 style="text-align: center">用户信息列表</h3>
-    <table border="1" class="table table-bordered table-hover">
-        <tr class="success">
-            <th>编号</th>
-            <th>姓名</th>
-            <th>性别</th>
-            <th>年龄</th>
-            <th>籍贯</th>
-            <th>QQ</th>
-            <th>邮箱</th>
-            <th>操作</th>
-        </tr>
-        <c:forEach items="${list}" var="user" varStatus="i">
-            <tr>
-                <td>${i.count}</td>
-                <td>${user.name}</td>
-                <td>${user.gender}</td>
-                <td>${user.age}</td>
-                <td>${user.address}</td>
-                <td>${user.qq}</td>
-                <td>${user.email}</td>
-                <%-- 跳转 通过id查找Service --%>
-                <td><a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/FindUserByIdService?id=${user.id}">修改</a>&nbsp;
-                        <%-- 跳转 通过id删除Service --%>
-                    <a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/DeleteUserService?id=${user.id}">删除</a></td>
+    <div>
+        <form class="form-inline" style="margin-bottom: 10px; float: left" action="${pageContext.request.contextPath}/FindByPageServlet" method="post">
+            <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" class="form-control" id="name" name="name" value="${condition.name[0]}">
+            </div>
+            <div class="form-group">
+                <label for="address">籍贯</label>
+                <input type="text" class="form-control" id="address" name="address" value="${condition.address[0]}">
+            </div>
+            <div class="form-group">
+                <label for="email">邮箱</label>
+                <input type="text" class="form-control" id="email" name="email" value="${condition.email[0]}">
+            </div>
+            <button type="submit" class="btn btn-default" id="select">查询</button>
+        </form>
+    </div>
+    <div style="float: right">
+        <%-- 跳转 添加用户Service --%>
+        <a class="btn btn-primary" href="${pageContext.request.contextPath}/add.jsp">添加联系人</a>
+        <%-- 跳转 删除选中用户Service --%>
+        <a class="btn btn-primary" href="javaScript:void(0)" onclick="tableform()">删除选中</a>
+    </div>
+    <form id="tableform" action="${pageContext.request.contextPath}/DeleteSelectUserServlet" method="post">
+        <table border="1" class="table table-bordered table-hover">
+            <tr class="success">
+                <th><input type="checkbox" id="selectAll"/></th>
+                <th>编号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>籍贯</th>
+                <th>QQ</th>
+                <th>邮箱</th>
+                <th>操作</th>
             </tr>
-        </c:forEach>
-        <tr>
-            <%-- 跳转 添加用户Service --%>
-            <td colspan="8" align="center"><a class="btn btn-primary" href="${pageContext.request.contextPath}/add.jsp">添加联系人</a></td>
-        </tr>
-    </table>
+            <c:forEach items="${pageBean.list}" var="user" varStatus="i">
+                <tr>
+                    <td><input type="checkbox" name="id" value="${user.id}"/></td>
+                    <td>${i.count}</td>
+                    <td>${user.name}</td>
+                    <td>${user.gender}</td>
+                    <td>${user.age}</td>
+                    <td>${user.address}</td>
+                    <td>${user.qq}</td>
+                    <td>${user.email}</td>
+                    <%-- 跳转 通过id查找Service --%>
+                    <td><a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/FindUserByIdService?id=${user.id}">修改</a>&nbsp;
+                            <%-- 跳转 通过id删除Service --%>
+                        <a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/DeleteUserService?id=${user.id}">删除</a></td>
+                </tr>
+            </c:forEach>
+        </table>
+    </form>
+    <div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <%-- 分页导航栏 --%>
+                <c:if test="${pageBean.currentPage != 1}">
+                    <li>
+                        <%-- 前一页 --%>
+                        <a href="${pageContext.request.contextPath}/FindByPageServlet?currentPage=${pageBean.currentPage - 1}&pageSize=4&name=${condition.name[0]}&address=${condition.address[0]}&email=${condition.email[0]}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${pageBean.currentPage == 1}">
+                    <li class="disabled">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                </c:if>
+
+                <%-- 总页数 --%>
+                <c:forEach begin="1" end="${pageBean.totalPage}" var="i">
+                    <%-- 当前页数选中 --%>
+                    <li ${i == pageBean.currentPage ? 'class="active"' : ''}><a href="${pageContext.request.contextPath}/FindByPageServlet?currentPage=${i}&pageSize=4&name=${condition.name[0]}&address=${condition.address[0]}&email=${condition.email[0]}">${i}</a></li>
+                </c:forEach>
+
+                <c:if test="${pageBean.currentPage != pageBean.totalPage}">
+                    <li>
+                        <%-- 后一页 --%>
+                        <a href="${pageContext.request.contextPath}/FindByPageServlet?currentPage=${pageBean.currentPage + 1}&pageSize=4&name=${condition.name[0]}&address=${condition.address[0]}&email=${condition.email[0]}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${pageBean.currentPage == pageBean.totalPage}">
+                    <li class="disabled">
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </c:if>
+
+                <span style="margin-left: 10px; font-size: 17pt">共${pageBean.totalCount}条数据，共${pageBean.totalPage}页</span>
+            </ul>
+        </nav>
+    </div>
 </div>
 </body>
 </html>

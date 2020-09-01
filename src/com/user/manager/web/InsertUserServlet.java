@@ -31,10 +31,8 @@ public class InsertUserServlet extends HttpServlet {
         UserService userService = new UserServiceImpl();
         // 2. 调用service中的 添加用户信息方法
         userService.insertUser(user);
-        // 3. 跳转 所有用户页面list 并显示
-        List<User> list = userService.findAll();
-        request.setAttribute("list",list);
-        request.getRequestDispatcher("/list.jsp").forward(request,response);
+        // 3. 跳转 所有用户页面list 并显示 (重定向)
+        response.sendRedirect(request.getContextPath() + "/FindByPageServlet");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

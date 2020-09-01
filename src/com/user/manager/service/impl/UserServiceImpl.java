@@ -5,8 +5,10 @@ import com.user.manager.dao.impl.UserDaoImpl;
 import com.user.manager.entity.User;
 import com.user.manager.service.UserService;
 import com.user.manager.utils.LoginException;
+import com.user.manager.utils.PageBean;
 
 import java.util.List;
+import java.util.Map;
 
 public class UserServiceImpl implements UserService {
     private UserDao userDao = new UserDaoImpl();
@@ -53,4 +55,35 @@ public class UserServiceImpl implements UserService {
     public void updateUserById(User user) {
         userDao.updateUserById(user);
     }
+
+    @Override
+    public void deleteSelectUser(String[] ids) {
+        // 依次 调用 dao 删除数据库中对应的User信息
+        for(String _id : ids) {
+            int id = Integer.valueOf(_id);
+            userDao.deleteUserById(id);
+        }
+    }
+
+    @Override
+    public PageBean<User> findByPageUser(String _currentPage, String _pageSize, Map<String, String[]> condition) {
+        // 类型转换
+        int currentPage = Integer.parseInt(_currentPage);
+        int pageSize = Integer.parseInt(_pageSize);
+        // 当页用户信息
+        List<User> list = userDao.findByPageUser((currentPage-1)*pageSize, pageSize, condition);
+        // 用户信息总条数
+        int totalCount = userDao.findTotalCount(condition);
+        // 总页数
+        int totalPage = (totalCount + pageSize - 1) / pageSize;
+        // 封装 分页对象
+        PageBean<User> pageBean = new PageBean<>();
+        pageBean.setCurrentPage(currentPage);
+        pageBean.setPageSize(pageSize);
+        pageBean.setList(list);
+        pageBean.setTotalCount(totalCount);
+        pageBean.setTotalPage(totalPage);
+        return pageBean;
+    }
+
 }

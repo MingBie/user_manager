@@ -26,7 +26,7 @@
 <body>
 <div align="center">
     <%-- 跳转 查询所有用户Servlet --%>
-    <a href="${pageContext.request.contextPath}/UserListServlet" style="text-decoration:none;font-size:33px">查询所有用户信息</a>
+    <a href="${pageContext.request.contextPath}/FindByPageServlet" style="text-decoration:none;font-size:33px">查询所有用户信息</a>
 </div>
 </body>
 </html>

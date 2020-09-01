@@ -6,7 +6,10 @@ import com.user.manager.utils.DruidUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class UserDaoImpl implements UserDao {
     private JdbcTemplate template = new JdbcTemplate(DruidUtils.getDataSource());
@@ -55,5 +58,46 @@ public class UserDaoImpl implements UserDao {
     public void updateUserById(User user) {
         String sql = "update user set gender = ?, age = ?, address = ?, qq = ?, email = ? where id = ?";
         template.update(sql, user.getGender(), user.getAge(), user.getAddress(), user.getQq(), user.getEmail(), user.getId());
+    }
+
+    @Override
+    // 分页查询
+    public List<User> findByPageUser(int start, int pageSize, Map<String, String[]> condition) {
+        StringBuilder _sql = new StringBuilder("select * from user where 1=1");
+        List<Object> params = new ArrayList<>(); // 存储 查询条件
+        Set<String> keys = condition.keySet();
+        // 拼接 条件sql语句
+        // 存储 查询条件
+        for(String key : keys) {
+            if (key.equals("name") || key.equals("address") || key.equals("email")) {
+                _sql.append(" and " + key + " like ? ");
+                params.add("%" + condition.get(key)[0] + "%");
+            }
+        }
+        // 拼接 分页sql语句
+        // 存储 分页条件
+        _sql.append(" limit ?,?");
+        params.add(start);
+        params.add(pageSize);
+        List<User> list = template.query(_sql.toString(), new BeanPropertyRowMapper<>(User.class), params.toArray());
+        return list;
+    }
+
+    @Override
+    // 查询信息条数
+    public int findTotalCount(Map<String, String[]> condition) {
+        StringBuilder _sql = new StringBuilder("select count(*) from user where 1=1");
+        List<Object> params = new ArrayList<>(); // 存储 查询条件
+        Set<String> keys = condition.keySet();
+        // 拼接 sql语句
+        // 存储 查询条件
+        for(String key : keys) {
+            if (key.equals("name") || key.equals("address") || key.equals("email")) {
+                _sql.append(" and " + key + " like ? ");
+                params.add("%" + condition.get(key)[0] + "%");
+            }
+        }
+        Integer totalCount = template.queryForObject(_sql.toString(), Integer.class, params.toArray());
+        return totalCount;
     }
 }

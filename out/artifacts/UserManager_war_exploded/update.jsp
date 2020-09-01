@@ -28,7 +28,7 @@
             $("#return").click(function() {
                 // 改变当前地址
                 // 跳转 查询所有用户信息Servlet
-                location.href = "${pageContext.request.contextPath}/UserListServlet";
+                location.href = "${pageContext.request.contextPath}/FindByPageServlet";
             })
         })
     </script>
@@ -37,7 +37,9 @@
 <div class="container" style="width: 400px;">
     <h3 style="text-align: center;">修改联系人</h3>
     <%-- 跳转 通过id更新用户信息Service --%>
-    <form action="${pageContext.request.contextPath}/UpdateUserByIdService?id=${user.id}" method="post">
+    <form action="${pageContext.request.contextPath}/UpdateUserByIdService" method="post">
+        <%-- 隐藏域 --%>
+        <input type="hidden" name="id" value="${user.id}"/>
         <div class="form-group">
             <label for="name">姓名：</label>
             <input type="text" class="form-control" id="name" name="name"  readonly="readonly" placeholder="请输入姓名"
@@ -46,14 +48,8 @@
 
         <div class="form-group" >
             <label>性别：</label>
-            <c:if test="${user.gender == '男'}">
-                <input type="radio" name="gender" value="男" checked />男
-                <input type="radio" name="gender" value="女" />女
-            </c:if>
-            <c:if test="${user.gender == '女'}">
-                <input type="radio" name="gender" value="男" />男
-                <input type="radio" name="gender" value="女" checked />女
-            </c:if>
+                <input type="radio" name="gender" value="男" ${user.gender == '男' ? 'checked':''} />男
+                <input type="radio" name="gender" value="女" ${user.gender == '女' ? 'checked':''} />女
         </div>
 
         <div class="form-group">
@@ -63,33 +59,21 @@
 
         <div class="form-group">
             <label for="address">籍贯：</label>
-            <select name="address" class="form-control">
-                <c:if test="${user.address == '广东'}">
-                    <option value="广东" selected>广东</option>
-                    <option value="广西">广西</option>
-                    <option value="湖南">湖南</option>
-                </c:if>
-                <c:if test="${user.address == '广西'}">
-                    <option value="广东">广东</option>
-                    <option value="广西" selected>广西</option>
-                    <option value="湖南">湖南</option>
-                </c:if>
-                <c:if test="${user.address == '湖南'}">
-                    <option value="广东" >广东</option>
-                    <option value="广西">广西</option>
-                    <option value="湖南" selected>湖南</option>
-                </c:if>
+            <select name="address" id='address' class="form-control">
+                <option value="广东" ${user.address == '广东' ? 'selected':''}>广东</option>
+                <option value="广西" ${user.address == '广西' ? 'selected':''}>广西</option>
+                <option value="湖南" ${user.address == '湖南' ? 'selected':''}>湖南</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="qq">QQ：</label>
-            <input type="text" class="form-control" name="qq" placeholder="请输入QQ号码" value="${user.qq}" />
+            <input type="text" id='qq' class="form-control" name="qq" placeholder="请输入QQ号码" value="${user.qq}" />
         </div>
 
         <div class="form-group">
             <label for="email">Email：</label>
-            <input type="text" class="form-control" name="email" placeholder="请输入邮箱地址" value="${user.email}" />
+            <input type="text" id='email' class="form-control" name="email" placeholder="请输入邮箱地址" value="${user.email}" />
         </div>
 
         <div class="form-group" style="text-align: center">
