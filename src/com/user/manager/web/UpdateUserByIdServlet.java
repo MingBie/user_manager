@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-@WebServlet("/UpdateUserByIdService")
-public class UpdateUserByIdService extends HttpServlet {
+@WebServlet("/UpdateUserByIdServlet")
+public class UpdateUserByIdServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 设置字符集
         request.setCharacterEncoding("UTF-8");

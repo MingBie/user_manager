@@ -28,6 +28,17 @@
     <script src="${pageContext.request.contextPath}/js/jquery-2.1.0.min.js"></script>
     <!-- 3. 导入bootstrap的js文件 -->
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+
+    <script>
+        $(function() {
+            // 返回按钮 显示所有用户信息list页面
+            $("#return").click(function() {
+                // 改变当前地址
+                // 跳转 查询所有用户信息Servlet
+                location.href = "${pageContext.request.contextPath}/FindByPageServlet";
+            })
+        })
+    </script>
 </head>
 <body>
 <div class="container">
@@ -72,7 +83,7 @@
         <div class="form-group" style="text-align: center">
             <input class="btn btn-primary" type="submit" value="提交" />
             <input class="btn btn-default" type="reset" value="重置" />
-            <input class="btn btn-default" type="button" value="返回" />
+            <input class="btn btn-default" type="button" id="return" value="返回" />
         </div>
     </form>
 </div>

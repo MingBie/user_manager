@@ -113,9 +113,9 @@
                     <td>${user.qq}</td>
                     <td>${user.email}</td>
                     <%-- 跳转 通过id查找Service --%>
-                    <td><a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/FindUserByIdService?id=${user.id}">修改</a>&nbsp;
+                    <td><a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/FindUserByIdServlet?id=${user.id}">修改</a>&nbsp;
                             <%-- 跳转 通过id删除Service --%>
-                        <a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/DeleteUserService?id=${user.id}">删除</a></td>
+                        <a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/DeleteUserServlet?id=${user.id}">删除</a></td>
                 </tr>
             </c:forEach>
         </table>

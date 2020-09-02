@@ -37,7 +37,7 @@
 <div class="container" style="width: 400px;">
     <h3 style="text-align: center;">修改联系人</h3>
     <%-- 跳转 通过id更新用户信息Service --%>
-    <form action="${pageContext.request.contextPath}/UpdateUserByIdService" method="post">
+    <form action="${pageContext.request.contextPath}/UpdateUserByIdServlet" method="post">
         <%-- 隐藏域 --%>
         <input type="hidden" name="id" value="${user.id}"/>
         <div class="form-group">

@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/FindUserByIdService")
-public class FindUserByIdService extends HttpServlet {
+@WebServlet("/FindUserByIdServlet")
+public class FindUserByIdServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 接收请求 获得id
         int id = Integer.valueOf(request.getParameter("id"));
