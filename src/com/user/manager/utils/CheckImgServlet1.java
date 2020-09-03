@@ -20,22 +20,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 验证码生成程序
+ * ��֤�����ɳ���
  * 
  * 
  * 
  */
-@WebServlet("/CheckImgServlet")
-public class CheckImgServlet extends HttpServlet {
+@WebServlet("/CheckImgServlet1")
+public class CheckImgServlet1 extends HttpServlet {
 
-	// 集合中保存所有成语
+	// �����б������г���
 	private List<String> words = new ArrayList<String>();
 
 	@Override
 	public void init() throws ServletException {
-		// 初始化阶段，读取new_words.txt
-		// web工程中读取 文件，必须使用绝对磁盘路径
-		String path = getServletContext().getRealPath("/WEB-INF/new_words.txt");
+		// ��ʼ���׶Σ���ȡnew_words.txt
+		// web�����ж�ȡ �ļ�������ʹ�þ��Դ���·��
+		String path = getServletContext().getRealPath("/WEB-INF/new_words1.txt");
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path));
 			String line;
@@ -50,7 +50,7 @@ public class CheckImgServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// 禁止缓存
+		// ��ֹ����
 		// response.setHeader("Cache-Control", "no-cache");
 		// response.setHeader("Pragma", "no-cache");
 		// response.setDateHeader("Expires", -1);
@@ -58,54 +58,54 @@ public class CheckImgServlet extends HttpServlet {
 		int width = 120;
 		int height = 30;
 
-		// 步骤一 绘制一张内存中图片
+		// ����һ ����һ���ڴ���ͼƬ
 		BufferedImage bufferedImage = new BufferedImage(width, height,
 				BufferedImage.TYPE_INT_RGB);
 
-		// 步骤二 图片绘制背景颜色 ---通过绘图对象
-		Graphics graphics = bufferedImage.getGraphics();// 得到画图对象 --- 画笔
-		// 绘制任何图形之前 都必须指定一个颜色
+		// ����� ͼƬ���Ʊ�����ɫ ---ͨ����ͼ����
+		Graphics graphics = bufferedImage.getGraphics();// �õ���ͼ���� --- ����
+		// �����κ�ͼ��֮ǰ ������ָ��һ����ɫ
 		graphics.setColor(getRandColor(200, 250));
 		graphics.fillRect(0, 0, width, height);
 
-		// 步骤三 绘制边框
+		// ������ ���Ʊ߿�
 		graphics.setColor(Color.WHITE);
 		graphics.drawRect(0, 0, width - 1, height - 1);
 
-		// 步骤四 四个随机数字
+		// ������ �ĸ��������
 		Graphics2D graphics2d = (Graphics2D) graphics;
-		// 设置输出字体
-		graphics2d.setFont(new Font("宋体", Font.BOLD, 18));
+		// �����������
+		graphics2d.setFont(new Font("����", Font.BOLD, 18));
 
-		Random random = new Random();// 生成随机数
+		Random random = new Random();// ���������
 		int index = random.nextInt(words.size());
-		String word = words.get(index);// 获得成语
+		String word = words.get(index);// ��ó���
 
-		// 定义x坐标
+		// ����x����
 		int x = 10;
 		for (int i = 0; i < word.length(); i++) {
-			// 随机颜色
+			// �����ɫ
 			graphics2d.setColor(new Color(20 + random.nextInt(110), 20 + random
 					.nextInt(110), 20 + random.nextInt(110)));
-			// 旋转 -30 --- 30度
+			// ��ת -30 --- 30��
 			int jiaodu = random.nextInt(60) - 30;
-			// 换算弧度
+			// ���㻡��
 			double theta = jiaodu * Math.PI / 180;
 
-			// 获得字母数字
+			// �����ĸ����
 			char c = word.charAt(i);
 
-			// 将c 输出到图片
+			// ��c �����ͼƬ
 			graphics2d.rotate(theta, x, 20);
 			graphics2d.drawString(String.valueOf(c), x, 20);
 			graphics2d.rotate(-theta, x, 20);
 			x += 30;
 		}
 
-		// 将验证码内容保存session
+		// ����֤�����ݱ���session
 		request.getSession().setAttribute("checkcode_session", word);
 
-		// 步骤五 绘制干扰线
+		// ������ ���Ƹ�����
 		graphics.setColor(getRandColor(160, 200));
 		int x1;
 		int x2;
@@ -119,10 +119,10 @@ public class CheckImgServlet extends HttpServlet {
 			graphics.drawLine(x1, y1, x1 + x2, x2 + y2);
 		}
 
-		// 将上面图片输出到浏览器 ImageIO
-		graphics.dispose();// 释放资源
+		// ������ͼƬ���������� ImageIO
+		graphics.dispose();// �ͷ���Դ
 		
-		//将图片写到response.getOutputStream()中
+		//��ͼƬд��response.getOutputStream()��
 		ImageIO.write(bufferedImage, "jpg", response.getOutputStream());
 
 	}
@@ -133,16 +133,16 @@ public class CheckImgServlet extends HttpServlet {
 	}
 
 	/**
-	 * 取其某一范围的color
+	 * ȡ��ĳһ��Χ��color
 	 * 
 	 * @param fc
-	 *            int 范围参数1
+	 *            int ��Χ����1
 	 * @param bc
-	 *            int 范围参数2
+	 *            int ��Χ����2
 	 * @return Color
 	 */
 	private Color getRandColor(int fc, int bc) {
-		// 取其随机颜色
+		// ȡ�������ɫ
 		Random random = new Random();
 		if (fc > 255) {
 			fc = 255;

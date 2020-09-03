@@ -18,7 +18,8 @@ public class LoginFilter implements Filter {
         String uri = request.getRequestURI();
         // 判断是否是 登录操作
         // 判断是否是 验证码
-        if (uri.contains("login.jsp") || uri.contains("LoginServlet") || uri.contains("CheckImgServlet")) {
+        if (uri.contains("login.jsp") || uri.contains("LoginServlet") || uri.contains("CheckImgServlet")
+                || uri.contains(".js") || uri.contains(".css")) {
             chain.doFilter(req, resp);
         } else {
             // 判断 是否已经登录
@@ -30,7 +31,6 @@ public class LoginFilter implements Filter {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         }
-
     }
 
     public void init(FilterConfig config) throws ServletException {
