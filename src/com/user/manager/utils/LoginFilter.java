@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter("/*")
+// 权限设置
 public class LoginFilter implements Filter {
     public void destroy() {
     }
