@@ -27,7 +27,7 @@
     <script>
         $(function() {
             $("#vcode").click(function() {
-                this.src = "${pageContext.request.contextPath}/CheckImgServlet1?a=" + Math.random();
+                this.src = "${pageContext.request.contextPath}/CheckImgServlet?a=" + Math.random();
             })
         })
     </script>
@@ -52,7 +52,7 @@
         <div class="form-inline">
             <label for="vcode">验证码：</label>
             <input type="text" name="verifycode" class="form-control" id="verifycode" placeholder="请输入验证码" style="width: 120px;"/>
-            <a href="javascript:refreshCode()"><img src="${pageContext.request.contextPath}/CheckImgServlet1" title="看不清点击刷新" id="vcode"/></a>
+            <a href="javascript:refreshCode()"><img src="${pageContext.request.contextPath}/CheckImgServlet" title="看不清点击刷新" id="vcode"/></a>
         </div>
         <hr/>
         <div class="form-group" style="text-align: center;">
